@@ -2,15 +2,19 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserRepository } from 'src/database/user/user.repository.interface';
+import { IEncrypter } from 'src/ports/encrypter.interface';
 
 @Injectable()
 export class UserService {
     constructor(
         @Inject('IUserRepository')
         private readonly userRepository: IUserRepository,
+        @Inject('IEncrypter')
+        private readonly encrypter: IEncrypter
     ) { }
 
     async create(createUserDto: CreateUserDto) {
+        createUserDto.password = await this.encrypter.hash(createUserDto.password);
         await this.userRepository.create(createUserDto);
     }
 
