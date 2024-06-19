@@ -10,10 +10,12 @@ import {
     HttpCode,
     HttpStatus,
     HttpException,
+    UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -48,8 +50,13 @@ export class UserController {
         await this.userService.update(id, updateUserDto);
     }
 
+    @UseGuards(AuthGuard)
     @Delete(':id')
-    remove(@Param('id', ParseIntPipe) id: number) {
+    async remove(@Param('id', ParseIntPipe) id: number) {
+        const user = await this.userService.findById(id);
+        if (!user)
+            throw new HttpException("Usuário não cadastrado", HttpStatus.NOT_FOUND);
+
         return this.userService.remove(id);
     }
 }

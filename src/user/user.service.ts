@@ -30,7 +30,7 @@ export class UserService {
         await this.userRepository.update(id, updateUserDto);
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} user`;
+    async remove(id: number) {
+        await this.userRepository.delete(id);
     }
 }

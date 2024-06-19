@@ -6,4 +6,5 @@ export interface IUserRepository {
     create(dto: CreateUserDto): Promise<void>;
     findUnique(params: { id?: number, email?: string }): Promise<User | null>;
     update(id: number, dto: UpdateUserDto): Promise<void>;
+    delete(id: number): Promise<void>;
 }

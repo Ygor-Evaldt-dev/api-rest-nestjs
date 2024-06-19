@@ -13,5 +13,6 @@ import { BcryptService } from 'src/auth/encrypter/bcrypt.service';
         { provide: 'IUserRepository', useClass: UserPrismaRepository },
         { provide: 'IEncrypter', useClass: BcryptService }
     ],
+    exports: [UserService]
 })
 export class UserModule { }
