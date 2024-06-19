@@ -19,26 +19,14 @@ export class UserService {
     }
 
     async findById(id: number) {
-        const user = await this.userRepository.findUnique({ id });
-        if (!user)
-            throw new HttpException("Usuario não cadastrado", HttpStatus.NOT_FOUND);
-
-        return user;
+        return await this.userRepository.findUnique({ id });
     }
 
     async findByEmail(email: string) {
-        const user = await this.userRepository.findUnique({ email });
-        if (!user)
-            throw new HttpException("Usuario não cadastrado", HttpStatus.NOT_FOUND);
-
-        return user;
+        return await this.userRepository.findUnique({ email });
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
-        const exists = await this.userRepository.findUnique({ id });
-        if (!exists)
-            throw new HttpException("Usuário não cadastrado", HttpStatus.NOT_FOUND);
-
         await this.userRepository.update(id, updateUserDto);
     }
 

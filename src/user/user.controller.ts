@@ -9,6 +9,7 @@ import {
     ParseIntPipe,
     HttpCode,
     HttpStatus,
+    HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -28,7 +29,11 @@ export class UserController {
 
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.userService.findById(id);
+        const user = await this.userService.findById(id);
+        if (user === null)
+            throw new HttpException("Usuario não cadastrado", HttpStatus.NOT_FOUND);
+
+        return user;
     }
 
     @Patch(':id')
@@ -36,6 +41,10 @@ export class UserController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updateUserDto: UpdateUserDto,
     ) {
+        const user = await this.userService.findById(id);
+        if (!user)
+            throw new HttpException("Usuário não cadastrado", HttpStatus.NOT_FOUND);
+
         await this.userService.update(id, updateUserDto);
     }
 
