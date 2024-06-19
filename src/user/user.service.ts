@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserRepository } from 'src/user/repositories/user.repository.interface';
@@ -19,7 +19,8 @@ export class UserService {
     }
 
     async findById(id: number) {
-        return await this.userRepository.findUnique({ id });
+        const user = await this.checkIfUserExists(id);
+        return user;
     }
 
     async findByEmail(email: string) {
@@ -27,10 +28,20 @@ export class UserService {
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
+        await this.checkIfUserExists(id);
         await this.userRepository.update(id, updateUserDto);
     }
 
     async remove(id: number) {
+        await this.checkIfUserExists(id);
         await this.userRepository.delete(id);
+    }
+
+    private async checkIfUserExists(id: number) {
+        const user = await this.userRepository.findUnique({ id });
+        if (!user)
+            throw new NotFoundException("Usuário não cadastrado");
+
+        return user;
     }
 }
