@@ -1,7 +1,7 @@
 import { hash, compare } from 'bcrypt';
-import { IEncrypter } from "src/ports/encrypter.interface";
+import { IEncrypter } from "src/auth/encrypter/encrypter.interface";
 
-export class BcryptAdapter implements IEncrypter {
+export class BcryptService implements IEncrypter {
     private saltRounds: number = 12;
 
     async hash(password: string): Promise<string> {

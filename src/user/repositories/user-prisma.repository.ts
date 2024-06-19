@@ -17,13 +17,12 @@ export class UserPrismaRepository implements IUserRepository {
 
     async findUnique(params: { id?: number, email?: string }): Promise<User | null> {
         const { id, email } = params;
-
-        if (id)
-            return await this.prisma.user.findUnique({ where: { id } });
-        else if (email)
-            return await this.prisma.user.findUnique({ where: { email } });
-
-        return null;
+        return await this.prisma.user.findUnique({
+            where: {
+                id,
+                email
+            }
+        });
     }
 
     async update(id: number, dto: UpdateUserDto): Promise<void> {
