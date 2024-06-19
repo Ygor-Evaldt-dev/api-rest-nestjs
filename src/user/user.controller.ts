@@ -16,31 +16,31 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) { }
+    constructor(
+        private readonly userService: UserService
+    ) { }
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    create(@Body() createUserDto: CreateUserDto) {
-        return this.userService.create(createUserDto);
-    }
-
-    @Get()
-    findAll() {
-        return this.userService.findAll();
+    async create(@Body() createUserDto: CreateUserDto) {
+        await this.userService.create(createUserDto);
     }
 
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.userService.findOne(id);
+        return await this.userService.findById(id);
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-        return this.userService.update(+id, updateUserDto);
+    async update(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateUserDto: UpdateUserDto,
+    ) {
+        await this.userService.update(id, updateUserDto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.userService.remove(+id);
+    remove(@Param('id', ParseIntPipe) id: number) {
+        return this.userService.remove(id);
     }
 }
