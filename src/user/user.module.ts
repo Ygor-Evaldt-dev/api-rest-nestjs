@@ -11,8 +11,8 @@ import { BcryptService } from 'src/auth/encrypter/bcrypt.service';
         UserService,
         PrismaService,
         { provide: 'IUserRepository', useClass: UserPrismaRepository },
-        { provide: 'IEncrypter', useClass: BcryptService }
+        { provide: 'IEncrypter', useClass: BcryptService },
     ],
-    exports: [UserService]
+    exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

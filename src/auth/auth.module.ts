@@ -13,22 +13,22 @@ import { ConfigService } from '@nestjs/config';
             useFactory: async (configService: ConfigService) => ({
                 secret: configService.get<string>('TOKEN_SECRET'),
                 signOptions: {
-                    expiresIn: configService.get<string>('TOKEN_TIME')
+                    expiresIn: configService.get<string>('TOKEN_TIME'),
                 },
             }),
-            inject: [ConfigService]
+            inject: [ConfigService],
         }),
-        UserModule
+        UserModule,
     ],
     providers: [
         {
             provide: 'IEncrypter',
-            useClass: BcryptService
+            useClass: BcryptService,
         },
         BcryptService,
-        AuthService
+        AuthService,
     ],
     exports: [BcryptService, AuthService],
-    controllers: [AuthController]
+    controllers: [AuthController],
 })
-export class AuthModule { }
+export class AuthModule {}

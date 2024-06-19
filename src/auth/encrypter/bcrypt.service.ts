@@ -1,5 +1,5 @@
 import { hash, compare } from 'bcrypt';
-import { IEncrypter } from "src/auth/encrypter/encrypter.interface";
+import { IEncrypter } from 'src/auth/encrypter/encrypter.interface';
 
 export class BcryptService implements IEncrypter {
     private saltRounds: number = 12;
@@ -8,7 +8,6 @@ export class BcryptService implements IEncrypter {
         return await hash(password, this.saltRounds);
     }
     async compare(password: string, hash: string): Promise<boolean> {
-        return await compare(password, hash);;
+        return await compare(password, hash);
     }
-
 }

@@ -12,15 +12,14 @@ import { Request } from 'express';
 export class AuthGuard implements CanActivate {
     constructor(
         private readonly jwtService: JwtService,
-        private readonly configService: ConfigService
-    ) { }
+        private readonly configService: ConfigService,
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
 
-        if (!token)
-            throw new UnauthorizedException();
+        if (!token) throw new UnauthorizedException();
 
         try {
             request['user'] = await this.getPayload(token);
