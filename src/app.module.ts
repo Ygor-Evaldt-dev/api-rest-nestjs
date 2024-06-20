@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ValidatorModule } from './validator/validator.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
     imports: [
@@ -13,9 +14,9 @@ import { ValidatorModule } from './validator/validator.module';
         }),
         UserModule,
         AuthModule,
-        ValidatorModule,
+        ValidatorModule
     ],
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

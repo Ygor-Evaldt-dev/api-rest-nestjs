@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     ConflictException,
     HttpException,
     HttpStatus,
@@ -11,6 +12,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserRepository } from 'src/user/repositories/user.repository.interface';
 import { IEncrypter } from 'src/auth/encrypter/encrypter.interface';
 import { ValidatorService } from 'src/validator/validator.service';
+import { cleanDto } from 'src/shared/utils/clean-dto';
 
 @Injectable()
 export class UserService {
@@ -23,15 +25,19 @@ export class UserService {
     ) { }
 
     async create(createUserDto: CreateUserDto) {
-        this.validateDtos(createUserDto);
+        const validatedDto = this.validatorService.dto(createUserDto);
+        const { email, password } = validatedDto;
 
-        const { email, password } = createUserDto;
+        if (!email)
+            throw new BadRequestException("Email é obrigatório");
+        else if (!password)
+            throw new BadRequestException("Senha é obrigatória");
 
         const userWithSameEmail = await this.userRepository.findUnique({ email });
         if (userWithSameEmail) throw new ConflictException("Usuário já cadastrado");
 
-        createUserDto.password = await this.encrypter.hash(password);
-        await this.userRepository.create(createUserDto);
+        validatedDto.password = await this.encrypter.hash(password);
+        await this.userRepository.create(validatedDto);
     }
 
     async findById(id: number) {
@@ -44,15 +50,15 @@ export class UserService {
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
-        this.validateDtos(updateUserDto);
-
         await this.checkIfUserExists(id);
 
-        const { password } = updateUserDto;
-        if (password)
-            updateUserDto.password = await this.encrypter.hash(password);
+        const validatedDto = this.validatorService.dto(updateUserDto);
 
-        await this.userRepository.update(id, updateUserDto);
+        const { password } = validatedDto;
+        if (password)
+            validatedDto.password = await this.encrypter.hash(password);
+
+        await this.userRepository.update(id, validatedDto);
     }
 
     async remove(id: number) {
@@ -65,13 +71,5 @@ export class UserService {
         if (!user) throw new NotFoundException('Usuário não cadastrado');
 
         return user;
-    }
-
-    private validateDtos({
-        email,
-        password
-    }: CreateUserDto | UpdateUserDto) {
-        if (email) this.validatorService.email(email);
-        if (password) this.validatorService.password(password);
     }
 }
