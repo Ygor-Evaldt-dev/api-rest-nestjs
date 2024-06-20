@@ -28,10 +28,9 @@ export class AuthService {
         if (!validPassword)
             throw new UnauthorizedException('Usuário não autorizado');
 
-        delete user.password;
         const access_token = await this.jwtService.signAsync({
             sub: user.id,
-            email: user.email,
+            email: user.email.complete,
         });
 
         return { access_token };

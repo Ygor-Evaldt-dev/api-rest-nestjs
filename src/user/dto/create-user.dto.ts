@@ -1,5 +1,7 @@
+import { Transform } from 'class-transformer';
 import {
     IsEmail,
+    IsLowercase,
     IsNumber,
     IsOptional,
     IsPhoneNumber,
@@ -19,7 +21,7 @@ import {
     PASSWORD_MIN_NUMBER,
     PASSWORD_MIN_UPPER,
     PHONE_LENGTH,
-} from 'src/shared/validator.constants';
+} from 'src/shared/constants/validator.constants';
 
 export class CreateUserDto {
     @IsOptional()
@@ -31,6 +33,7 @@ export class CreateUserDto {
     @MaxLength(EMAIL_MAX_LENGTH, {
         message: `E-mail deve ter no máximo ${EMAIL_MAX_LENGTH} caracteres`,
     })
+    @Transform(({ value }) => value?.trim().toLowerCase())
     email: string;
 
     @IsString({ message: 'Senha deve ser um texto' })
@@ -48,6 +51,7 @@ export class CreateUserDto {
     @Length(PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, {
         message: `Senha deve ter entre ${PASSWORD_MIN_LENGTH} e ${PASSWORD_MAX_LENGTH} caracteres`,
     })
+    @Transform(({ value }) => value?.trim().toLowerCase())
     password: string;
 
     @IsOptional()
@@ -55,6 +59,7 @@ export class CreateUserDto {
     @Length(NAME_MIN_LENGTH, NAME_MAX_LENGTH, {
         message: `Nome deve ter no mínimo ${NAME_MIN_LENGTH} e no máximo ${NAME_MAX_LENGTH} caracteres`,
     })
+    @Transform(({ value }) => value?.trim().toLowerCase())
     name?: string;
 
     @IsOptional()
@@ -63,5 +68,6 @@ export class CreateUserDto {
     @Length(PHONE_LENGTH, PHONE_LENGTH, {
         message: `Telefone deve ter ${PHONE_LENGTH} dígitos`,
     })
+    @Transform(({ value }) => value?.trim().toLowerCase())
     phone?: string;
 }
