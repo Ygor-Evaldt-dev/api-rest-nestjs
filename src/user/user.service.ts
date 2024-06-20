@@ -10,6 +10,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserRepository } from 'src/user/repositories/user.repository.interface';
 import { IEncrypter } from 'src/auth/encrypter/encrypter.interface';
+import { ValidatorService } from 'src/validator/validator.service';
 
 @Injectable()
 export class UserService {
@@ -18,18 +19,18 @@ export class UserService {
         private readonly userRepository: IUserRepository,
         @Inject('IEncrypter')
         private readonly encrypter: IEncrypter,
+        private readonly validatorService: ValidatorService
     ) { }
 
     async create(createUserDto: CreateUserDto) {
-        const userWithSameEmail = await this.userRepository.findUnique({
-            email: createUserDto.email
-        });
-        if (userWithSameEmail)
-            throw new ConflictException("Usuário já cadastrado");
+        this.validateDtos(createUserDto);
 
-        createUserDto.password = await this.encrypter.hash(
-            createUserDto.password,
-        );
+        const { email, password } = createUserDto;
+
+        const userWithSameEmail = await this.userRepository.findUnique({ email });
+        if (userWithSameEmail) throw new ConflictException("Usuário já cadastrado");
+
+        createUserDto.password = await this.encrypter.hash(password);
         await this.userRepository.create(createUserDto);
     }
 
@@ -43,7 +44,14 @@ export class UserService {
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
+        this.validateDtos(updateUserDto);
+
         await this.checkIfUserExists(id);
+
+        const { password } = updateUserDto;
+        if (password)
+            updateUserDto.password = await this.encrypter.hash(password);
+
         await this.userRepository.update(id, updateUserDto);
     }
 
@@ -57,5 +65,13 @@ export class UserService {
         if (!user) throw new NotFoundException('Usuário não cadastrado');
 
         return user;
+    }
+
+    private validateDtos({
+        email,
+        password
+    }: CreateUserDto | UpdateUserDto) {
+        if (email) this.validatorService.email(email);
+        if (password) this.validatorService.password(password);
     }
 }

@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { ValidatorModule } from './validator/validator.module';
 
 @Module({
     imports: [
@@ -12,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
         }),
         UserModule,
         AuthModule,
+        ValidatorModule,
     ],
     controllers: [AppController],
     providers: [AppService],
