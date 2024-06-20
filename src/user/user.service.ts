@@ -11,8 +11,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserRepository } from 'src/user/repositories/user.repository.interface';
 import { IEncrypter } from 'src/auth/encrypter/encrypter.interface';
-import { ValidatorService } from 'src/validator/validator.service';
-import { cleanDto } from 'src/shared/utils/clean-dto';
 
 @Injectable()
 export class UserService {
@@ -21,23 +19,16 @@ export class UserService {
         private readonly userRepository: IUserRepository,
         @Inject('IEncrypter')
         private readonly encrypter: IEncrypter,
-        private readonly validatorService: ValidatorService
     ) { }
 
     async create(createUserDto: CreateUserDto) {
-        const validatedDto = this.validatorService.dto(createUserDto);
-        const { email, password } = validatedDto;
-
-        if (!email)
-            throw new BadRequestException("Email é obrigatório");
-        else if (!password)
-            throw new BadRequestException("Senha é obrigatória");
+        const { email, password } = createUserDto;
 
         const userWithSameEmail = await this.userRepository.findUnique({ email });
         if (userWithSameEmail) throw new ConflictException("Usuário já cadastrado");
 
-        validatedDto.password = await this.encrypter.hash(password);
-        await this.userRepository.create(validatedDto);
+        createUserDto.password = await this.encrypter.hash(password);
+        await this.userRepository.create(createUserDto);
     }
 
     async findById(id: number) {
@@ -52,13 +43,11 @@ export class UserService {
     async update(id: number, updateUserDto: UpdateUserDto) {
         await this.checkIfUserExists(id);
 
-        const validatedDto = this.validatorService.dto(updateUserDto);
-
-        const { password } = validatedDto;
+        const { password } = updateUserDto;
         if (password)
-            validatedDto.password = await this.encrypter.hash(password);
+            updateUserDto.password = await this.encrypter.hash(password);
 
-        await this.userRepository.update(id, validatedDto);
+        await this.userRepository.update(id, updateUserDto);
     }
 
     async remove(id: number) {

@@ -4,8 +4,6 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { ValidatorModule } from './validator/validator.module';
-import { SharedModule } from './shared/shared.module';
 
 @Module({
     imports: [
@@ -13,8 +11,7 @@ import { SharedModule } from './shared/shared.module';
             isGlobal: true,
         }),
         UserModule,
-        AuthModule,
-        ValidatorModule
+        AuthModule
     ],
     controllers: [AppController],
     providers: [AppService],
