@@ -20,7 +20,7 @@ import { validate } from 'class-validator';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) { }
+    constructor(private readonly userService: UserService) {}
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
@@ -38,7 +38,7 @@ export class UserController {
     @Patch(':id')
     async update(
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateUserDto: UpdateUserDto
+        @Body() updateUserDto: UpdateUserDto,
     ) {
         await this.userService.update(id, updateUserDto);
     }

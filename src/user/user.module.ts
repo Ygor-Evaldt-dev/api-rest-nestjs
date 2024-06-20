@@ -16,4 +16,4 @@ import { BcryptService } from 'src/auth/encrypter/bcrypt.service';
     ],
     exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}
