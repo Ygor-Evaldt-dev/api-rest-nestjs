@@ -5,6 +5,7 @@ import { User as UserEntity } from 'src/user/entities/user.entity';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 import { User } from '@prisma/client';
+import { capitalize } from 'src/shared/utils/capitalize.util';
 
 @Injectable()
 export class UserPrismaRepository implements IUserRepository {
@@ -27,7 +28,10 @@ export class UserPrismaRepository implements IUserRepository {
                 email,
             },
         });
-        return this.fromDatabase(register);
+
+        return register
+            ? this.fromDatabase(register)
+            : null
     }
 
     async update(id: number, dto: UpdateUserDto): Promise<void> {
@@ -50,6 +54,6 @@ export class UserPrismaRepository implements IUserRepository {
         name,
         phone,
     }: User): UserEntity {
-        return new UserEntity(id, email, password, name, phone);
+        return new UserEntity(id, email, password, capitalize(name), phone);
     }
 }

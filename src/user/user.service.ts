@@ -35,16 +35,18 @@ export class UserService {
     }
 
     async findById(id: number) {
-        const user = await this.checkIfUserExists(id);
-        return user;
+        return await this.existingUser(id);
     }
 
     async findByEmail(email: string) {
-        return await this.userRepository.findUnique({ email });
+        const user = await this.userRepository.findUnique({ email });
+        if (!user) throw new NotFoundException('Usuário não cadastrado');
+
+        return user;
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
-        await this.checkIfUserExists(id);
+        await this.existingUser(id);
 
         const { password } = updateUserDto;
         if (password)
@@ -54,11 +56,11 @@ export class UserService {
     }
 
     async remove(id: number) {
-        await this.checkIfUserExists(id);
+        await this.existingUser(id);
         await this.userRepository.delete(id);
     }
 
-    private async checkIfUserExists(id: number) {
+    private async existingUser(id: number) {
         const user = await this.userRepository.findUnique({ id });
         if (!user) throw new NotFoundException('Usuário não cadastrado');
 
