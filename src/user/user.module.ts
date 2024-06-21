@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { PrismaService } from 'src/database/prisma.service';
-import { UserPrismaRepository } from 'src/user/repositories/user-prisma.repository';
+import { PrismaRepository } from 'src/user/repositories/prisma.repository';
 import { BcryptService } from 'src/auth/encrypter/bcrypt.service';
 
 @Module({
@@ -11,9 +11,9 @@ import { BcryptService } from 'src/auth/encrypter/bcrypt.service';
     providers: [
         UserService,
         PrismaService,
-        { provide: 'IUserRepository', useClass: UserPrismaRepository },
+        { provide: 'IUserRepository', useClass: PrismaRepository },
         { provide: 'IEncrypter', useClass: BcryptService },
     ],
     exports: [UserService],
 })
-export class UserModule {}
+export class UserModule { }

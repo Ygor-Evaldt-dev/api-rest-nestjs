@@ -19,7 +19,7 @@ export class UserService {
         private readonly userRepository: IUserRepository,
         @Inject('IEncrypter')
         private readonly encrypter: IEncrypter,
-    ) {}
+    ) { }
 
     async create(createUserDto: CreateUserDto) {
         const { email, password } = createUserDto;
@@ -39,7 +39,7 @@ export class UserService {
     }
 
     async findByEmail(email: string) {
-        const user = await this.userRepository.findUnique({ email });
+        const user = await this.userRepository.findUnique({ email, getPassword: true });
         if (!user) throw new NotFoundException('Usuário não cadastrado');
 
         return user;
