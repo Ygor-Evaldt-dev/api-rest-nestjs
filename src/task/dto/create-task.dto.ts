@@ -17,6 +17,7 @@ export class CreateTaskDto {
     @IsBoolean({ message: 'Finalizada deve ser um booleano' })
     finished: boolean
 
+    @IsOptional()
     @IsNumber({ allowInfinity: false }, { message: 'ID do usuário deve ser um número' })
-    userId: number
+    userId?: number
 }

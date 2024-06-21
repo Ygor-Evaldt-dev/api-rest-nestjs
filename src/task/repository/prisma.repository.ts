@@ -55,4 +55,10 @@ export class PrismaRepository implements ITaskRepository {
         })
     }
 
+    async delete(id: number): Promise<void> {
+        await this.prisma.task.delete({
+            where: { id }
+        });
+    }
+
 }
