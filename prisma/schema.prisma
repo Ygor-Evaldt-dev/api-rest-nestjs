@@ -29,8 +29,8 @@ model Task {
     title       String  @map("titulo") @db.VarChar(50)
     description String  @map("descricao") @db.VarChar(255)
     finished    Boolean @default(false) @map("finalizada")
-    user_id     Int     @map("id_usuario")
-    user        User    @relation(fields: [user_id], references: [id])
+    userId      Int     @map("id_usuario")
+    user        User    @relation(fields: [userId], references: [id])
 
     @@map("tarefa")
 }

@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsBoolean, IsOptional, IsString, Length } from "class-validator";
+import { IsBoolean, IsNumber, IsOptional, IsString, Length } from "class-validator";
 import { TITLE_MAX_LENGTH, TITLE_MIN_LENGTH } from "src/shared/constants/validator.constants";
 
 export class CreateTaskDto {
@@ -16,4 +16,7 @@ export class CreateTaskDto {
     @IsOptional()
     @IsBoolean({ message: 'Finalizada deve ser um booleano' })
     finished: boolean
+
+    @IsNumber({ allowInfinity: false }, { message: 'ID do usuário deve ser um número' })
+    userId: number
 }
