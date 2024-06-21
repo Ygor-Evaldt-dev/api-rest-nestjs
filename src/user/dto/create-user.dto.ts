@@ -9,7 +9,6 @@ import {
     IsStrongPassword,
     Length,
     MaxLength,
-    MinLength,
 } from 'class-validator';
 import {
     EMAIL_MAX_LENGTH,
@@ -44,14 +43,13 @@ export class CreateUserDto {
             minSymbols: PASSWORD_MIN_SYMBOLS,
         },
         {
-            message:
-                'Senha deve conter no mínimo uma letra maiúscula, um número e um caracter especial',
+            message: 'Senha deve conter no mínimo uma letra maiúscula, um número e um caracter especial',
         },
     )
     @Length(PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, {
         message: `Senha deve ter entre ${PASSWORD_MIN_LENGTH} e ${PASSWORD_MAX_LENGTH} caracteres`,
     })
-    @Transform(({ value }) => value?.trim().toLowerCase())
+    @Transform(({ value }) => value?.trim())
     password: string;
 
     @IsOptional()
@@ -68,6 +66,6 @@ export class CreateUserDto {
     @Length(PHONE_LENGTH, PHONE_LENGTH, {
         message: `Telefone deve ter ${PHONE_LENGTH} dígitos`,
     })
-    @Transform(({ value }) => value?.trim().toLowerCase())
+    @Transform(({ value }) => value?.trim())
     phone?: string;
 }
