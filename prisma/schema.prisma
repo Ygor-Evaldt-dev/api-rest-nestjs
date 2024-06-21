@@ -27,7 +27,7 @@ model User {
 model Task {
     id          Int     @id @default(autoincrement()) @map("id")
     title       String  @map("titulo") @db.VarChar(50)
-    description String  @map("descricao") @db.VarChar(255)
+    description String? @map("descricao") @db.VarChar(255)
     finished    Boolean @default(false) @map("finalizada")
     userId      Int     @map("id_usuario")
     user        User    @relation(fields: [userId], references: [id])

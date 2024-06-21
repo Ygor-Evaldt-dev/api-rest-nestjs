@@ -1,5 +1,5 @@
 export type Filter = {
-    id: number,
+    id?: number,
     page: number,
     take: number,
     userId: number,

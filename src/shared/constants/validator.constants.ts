@@ -12,4 +12,4 @@ export const NAME_MIN_LENGTH = 3;
 export const NAME_MAX_LENGTH = 100;
 
 export const TITLE_MIN_LENGTH = 1;
-export const TITLE_MAX_LENGTH = 50;
+export const TITLE_MAX_LENGTH = 100;

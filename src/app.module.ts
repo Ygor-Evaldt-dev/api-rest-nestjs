@@ -11,11 +11,11 @@ import { TaskModule } from './task/task.module';
         ConfigModule.forRoot({
             isGlobal: true,
         }),
-        UserModule,
         AuthModule,
+        UserModule,
         TaskModule,
     ],
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ITaskRepository } from './repository/task.repository.interface';
@@ -21,15 +21,21 @@ export class TaskService {
         take,
         userId
     }: FindAll) {
-        return await this.taskRepository.findMany({
+        const tasks = await this.taskRepository.findMany({
             take,
             skip: page * take,
             userId
         });
+        if (tasks.length === 0)
+            throw new NotFoundException("Nenhuma tarefa cadastrada");
+
+        return tasks;
     }
 
     async findUnique(id: number) {
-        return await this.taskRepository.findUnique(id);
+        const task = await this.taskRepository.findUnique(id);
+        if (!task)
+            throw new NotFoundException("Tarefa não cadastrada");
     }
 
     async filter({
@@ -40,7 +46,7 @@ export class TaskService {
         title,
         finished
     }: Filter) {
-        return await this.taskRepository.findMany({
+        const tasks = await this.taskRepository.findMany({
             skip: (page * take),
             take,
             userId,
@@ -48,13 +54,20 @@ export class TaskService {
             title,
             finished
         });
+
+        if (tasks.length === 0)
+            throw new NotFoundException("Nenhuma tarefa encontrada");
+
+        return tasks;
     }
 
     async update(id: number, updateTaskDto: UpdateTaskDto) {
+        await this.findUnique(id);
         await this.taskRepository.update(id, updateTaskDto);
     }
 
     async remove(id: number) {
+        await this.findUnique(id);
         await this.taskRepository.delete(id);
     }
 }

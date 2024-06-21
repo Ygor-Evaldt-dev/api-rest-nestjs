@@ -3,11 +3,11 @@ import { CreateTaskDto } from "../dto/create-task.dto";
 import { UpdateTaskDto } from "../dto/update-task.dto";
 import { Task } from "../entities/task.entity";
 import { ITaskRepository } from "./task.repository.interface";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class PrismaRepository implements ITaskRepository {
-    constructor(
-        private readonly prisma: PrismaService
-    ) { }
+    constructor(private readonly prisma: PrismaService) { }
 
     async create({ title, description, finished, userId }: CreateTaskDto): Promise<void> {
         await this.prisma.task.create({
@@ -42,7 +42,9 @@ export class PrismaRepository implements ITaskRepository {
             where: {
                 userId,
                 id,
-                title,
+                title: {
+                    startsWith: `%${title}`
+                },
                 finished,
             }
         });
