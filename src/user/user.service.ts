@@ -24,9 +24,7 @@ export class UserService {
     async create(createUserDto: CreateUserDto) {
         const { email, password } = createUserDto;
 
-        const userWithSameEmail = await this.userRepository.findUnique({
-            email,
-        });
+        const userWithSameEmail = await this.userRepository.findUnique({ email });
         if (userWithSameEmail)
             throw new ConflictException('Usuário já cadastrado');
 
