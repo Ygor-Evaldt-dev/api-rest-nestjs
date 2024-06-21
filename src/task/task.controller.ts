@@ -4,11 +4,14 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { FilterTasksDto } from './dto/filter-task.dto';
 import { PaginationDto } from './dto/pagination.dto';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('task')
 export class TaskController {
     constructor(private readonly taskService: TaskService) { }
 
+    @ApiOperation({ summary: 'Cadastrar tarefa' })
     @Post()
     async create(
         @Body() createTaskDto: CreateTaskDto,
@@ -19,6 +22,7 @@ export class TaskController {
         });
     }
 
+    @ApiOperation({ summary: 'Buscar tarefas' })
     @Get(':page/:take')
     async findAll(
         @Param() { page, take }: PaginationDto,
@@ -31,6 +35,7 @@ export class TaskController {
         });
     }
 
+    @ApiOperation({ summary: 'Filtrar tarefas' })
     @Get('filter/:page/:take')
     @UsePipes(new ValidationPipe({ transform: true }))
     async filter(
@@ -48,6 +53,7 @@ export class TaskController {
         });
     }
 
+    @ApiOperation({ summary: 'Atualizar tarefa' })
     @Patch(':id')
     async update(
         @Param('id') id: string,
@@ -60,6 +66,7 @@ export class TaskController {
         });
     }
 
+    @ApiOperation({ summary: 'Excluir tarefas' })
     @Delete(':id')
     async remove(@Param('id') id: string) {
         await this.taskService.remove(+id);

@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
     IsEmail,
@@ -23,10 +24,11 @@ import {
 } from 'src/shared/constants/validator.constants';
 
 export class CreateUserDto {
-    @IsOptional()
-    @IsNumber({ allowInfinity: false }, { message: 'ID deve ser um número' })
-    id?: number;
-
+    @ApiProperty({
+        type: 'string',
+        description: 'E-mail válido',
+        required: true
+    })
     @IsString({ message: 'E-mail deve ser um texto' })
     @IsEmail({}, { message: 'Email inválido' })
     @MaxLength(EMAIL_MAX_LENGTH, {
@@ -35,6 +37,11 @@ export class CreateUserDto {
     @Transform(({ value }) => value?.trim().toLowerCase())
     email: string;
 
+    @ApiProperty({
+        type: 'string',
+        description: 'Senha forte',
+        required: true
+    })
     @IsString({ message: 'Senha deve ser um texto' })
     @IsStrongPassword(
         {
@@ -52,6 +59,11 @@ export class CreateUserDto {
     @Transform(({ value }) => value?.trim())
     password: string;
 
+    @ApiProperty({
+        type: 'string',
+        description: 'Nome do usuário',
+        required: false
+    })
     @IsOptional()
     @IsString({ message: 'Nome deve ser um texto' })
     @Length(NAME_MIN_LENGTH, NAME_MAX_LENGTH, {
@@ -60,6 +72,11 @@ export class CreateUserDto {
     @Transform(({ value }) => value?.trim().toLowerCase())
     name?: string;
 
+    @ApiProperty({
+        type: 'string',
+        description: 'Telefone válido',
+        required: false
+    })
     @IsOptional()
     @IsString({ message: 'Telefone deve ser um texto' })
     @IsPhoneNumber('BR', { message: 'Telefone inválido' })
