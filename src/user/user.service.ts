@@ -37,7 +37,7 @@ export class UserService {
     }
 
     async findByEmail(email: string) {
-        const user = await this.userRepository.findUnique({ email, getPassword: true });
+        const user = await this.userRepository.findUnique({ email });
         if (!user) throw new NotFoundException('Usuário não cadastrado');
 
         return user;

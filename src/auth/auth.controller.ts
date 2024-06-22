@@ -4,7 +4,7 @@ import { SingInDto } from './dto/sing-in.dto';
 import { SkipAuth } from './custon-decorators/skip-auth.decorator';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Autênticação')
+@ApiTags('Autenticação')
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) { }

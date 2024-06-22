@@ -20,9 +20,8 @@ export class PrismaRepository implements IUserRepository {
     async findUnique(params: {
         id?: number;
         email?: string;
-        getPassword?: boolean
     }): Promise<UserEntity | null> {
-        const { id, email, getPassword = false } = params;
+        const { id, email } = params;
         const register = await this.prisma.user.findUnique({
             where: {
                 id,
@@ -31,7 +30,7 @@ export class PrismaRepository implements IUserRepository {
         });
 
         return register
-            ? this.fromDatabase(register, getPassword)
+            ? this.fromDatabase(register)
             : null
     }
 
@@ -54,10 +53,7 @@ export class PrismaRepository implements IUserRepository {
         password,
         name,
         phone,
-    }: User, getPassword: boolean): UserEntity {
-        const user = new UserEntity(id, email, password, capitalize(name), phone);
-        return getPassword
-            ? user
-            : { ...user, password: null }
+    }: User): UserEntity {
+        return new UserEntity(id, email, password, capitalize(name), phone);
     }
 }
