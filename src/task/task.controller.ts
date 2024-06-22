@@ -3,8 +3,10 @@ import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { FilterTasksDto } from './dto/filter-task.dto';
-import { PaginationDto } from './dto/pagination.dto';
+import { PaginationDto } from '../shared/dto/pagination.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiPagination } from 'src/shared/decorators/api-pagination.decorator';
+import { ApiFilterQueries } from './decorators/api-filter-queries.decorator';
 
 @ApiTags('Tarefa')
 @ApiBearerAuth()
@@ -24,18 +26,7 @@ export class TaskController {
     }
 
     @ApiOperation({ summary: 'Buscar tarefas' })
-    @ApiParam({
-        name: 'page',
-        type: 'number',
-        description: 'Adicione uma página a partir de zero',
-        required: true
-    })
-    @ApiParam({
-        name: 'take',
-        type: 'number',
-        description: 'Quantidade de registros por página',
-        required: true
-    })
+    @ApiPagination()
     @Get(':page/:take')
     async findAll(
         @Param() { page, take }: PaginationDto,
@@ -49,33 +40,8 @@ export class TaskController {
     }
 
     @ApiOperation({ summary: 'Filtrar tarefas' })
-    @ApiParam({
-        name: 'page',
-        type: 'number',
-        description: 'Adicione uma página a partir de zero',
-        required: true
-    })
-    @ApiParam({
-        name: 'take',
-        type: 'number',
-        description: 'Quantidade de registros por página',
-        required: true
-    })
-    @ApiQuery({
-        name: 'id',
-        description: 'ID da tarefa',
-        type: 'number'
-    })
-    @ApiQuery({
-        name: 'title',
-        description: 'Título da tarefa',
-        type: 'number'
-    })
-    @ApiQuery({
-        name: 'finished',
-        description: 'Tarefa finalizada',
-        type: 'boolean'
-    })
+    @ApiPagination()
+    @ApiFilterQueries()
     @Get('filter/:page/:take')
     @UsePipes(new ValidationPipe({ transform: true }))
     async filter(
@@ -94,11 +60,6 @@ export class TaskController {
     }
 
     @ApiOperation({ summary: 'Atualizar tarefa' })
-    @ApiParam({
-        name: 'id',
-        description: 'ID da tarefa',
-        type: 'number'
-    })
     @Patch(':id')
     async update(
         @Param('id') id: string,
@@ -112,11 +73,6 @@ export class TaskController {
     }
 
     @ApiOperation({ summary: 'Excluir tarefas' })
-    @ApiParam({
-        name: 'id',
-        description: 'ID da tarefa',
-        type: 'number'
-    })
     @Delete(':id')
     async remove(@Param('id') id: string) {
         await this.taskService.remove(+id);
