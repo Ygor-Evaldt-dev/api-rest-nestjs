@@ -15,9 +15,9 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SkipAuth } from 'src/auth/custon-decorators/skip-auth.decorator';
-import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('Usuário')
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) { }
@@ -32,6 +32,11 @@ export class UserController {
 
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Atualizar usuário' })
+    @ApiParam({
+        name: 'id',
+        description: 'ID do usuário',
+        type: 'number'
+    })
     @Patch(':id')
     async update(
         @Param('id', ParseIntPipe) id: number,
@@ -42,6 +47,11 @@ export class UserController {
 
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Excluir usuário' })
+    @ApiParam({
+        name: 'id',
+        description: 'ID do usuário',
+        type: 'number'
+    })
     @Delete(':id')
     async remove(@Param('id', ParseIntPipe) id: number) {
         await this.userService.remove(id);

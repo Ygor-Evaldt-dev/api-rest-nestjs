@@ -42,9 +42,7 @@ export class PrismaRepository implements ITaskRepository {
             where: {
                 userId,
                 id,
-                title: {
-                    startsWith: `%${title}`
-                },
+                title: title ? { startsWith: `%${title}` } : title,
                 finished,
             }
         });

@@ -55,6 +55,7 @@ export class TaskService {
             finished
         });
 
+
         if (tasks.length === 0)
             throw new NotFoundException("Nenhuma tarefa encontrada");
 
