@@ -9,7 +9,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
 
-    @ApiOperation({ summary: 'Autênticar' })
+    @ApiOperation({ summary: 'Autenticar' })
     @SkipAuth()
     @Post('login')
     async singIn(@Body() { email, password }: SingInDto) {
