@@ -4,7 +4,7 @@ export function getAxiosInstance(): AxiosInstance {
     return axios.create({
         baseURL: `${process.env.BASE_URL}`,
         headers: {
-            'Content-Type': 'application/json'
-        }
+            'Content-Type': 'application/json',
+        },
     });
 }

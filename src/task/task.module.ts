@@ -11,7 +11,7 @@ import { DatabaseModule } from 'src/database/database.module';
     providers: [
         PrismaService,
         { provide: 'ITaskRepository', useClass: PrismaRepository },
-        TaskService
+        TaskService,
     ],
 })
-export class TaskModule { }
+export class TaskModule {}

@@ -1,5 +1,5 @@
 export type FindAll = {
-    page: number,
-    take: number,
-    userId: number
-}
+    page: number;
+    take: number;
+    userId: number;
+};

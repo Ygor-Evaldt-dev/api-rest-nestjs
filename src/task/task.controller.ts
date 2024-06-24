@@ -1,10 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Request, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    ParseIntPipe,
+    Request,
+    Query,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { FilterTasksDto } from './dto/filter-task.dto';
 import { PaginationDto } from '../shared/dto/pagination.dto';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+    ApiBearerAuth,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags,
+} from '@nestjs/swagger';
 import { ApiPagination } from 'src/shared/decorators/api-pagination.decorator';
 import { ApiFilterQueries } from './decorators/api-filter-queries.decorator';
 
@@ -12,30 +31,25 @@ import { ApiFilterQueries } from './decorators/api-filter-queries.decorator';
 @ApiBearerAuth()
 @Controller('task')
 export class TaskController {
-    constructor(private readonly taskService: TaskService) { }
+    constructor(private readonly taskService: TaskService) {}
 
     @ApiOperation({ summary: 'Cadastrar tarefa' })
     @Post()
-    async create(
-        @Body() createTaskDto: CreateTaskDto,
-        @Request() req: any
-    ) {
+    async create(@Body() createTaskDto: CreateTaskDto, @Request() req: any) {
         await this.taskService.create({
-            ...createTaskDto, userId: req.user?.sub
+            ...createTaskDto,
+            userId: req.user?.sub,
         });
     }
 
     @ApiOperation({ summary: 'Buscar tarefas' })
     @ApiPagination()
     @Get(':page/:take')
-    async findAll(
-        @Param() { page, take }: PaginationDto,
-        @Request() req: any
-    ) {
+    async findAll(@Param() { page, take }: PaginationDto, @Request() req: any) {
         return await this.taskService.findAll({
             page,
             take,
-            userId: req.user?.sub
+            userId: req.user?.sub,
         });
     }
 
@@ -55,7 +69,7 @@ export class TaskController {
             userId: req.user?.sub,
             id,
             title,
-            finished
+            finished,
         });
     }
 
@@ -64,11 +78,11 @@ export class TaskController {
     async update(
         @Param('id') id: string,
         @Body() updateTaskDto: UpdateTaskDto,
-        @Request() req: any
+        @Request() req: any,
     ) {
         await this.taskService.update(+id, {
             ...updateTaskDto,
-            userId: req.user?.sub
+            userId: req.user?.sub,
         });
     }
 

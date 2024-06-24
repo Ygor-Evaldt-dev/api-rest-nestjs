@@ -14,6 +14,6 @@ export function ApiPagination() {
             type: 'number',
             description: 'Quantidade de registros por página',
             required: true,
-        })
+        }),
     );
 }

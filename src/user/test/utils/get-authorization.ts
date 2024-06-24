@@ -1,3 +1,1 @@
-export async function getAuthorization() {
-
-}
+export async function getAuthorization() {}

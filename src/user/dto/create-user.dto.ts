@@ -26,7 +26,7 @@ export class CreateUserDto {
     @ApiProperty({
         type: 'string',
         description: 'E-mail válido',
-        required: true
+        required: true,
     })
     @IsDefined({ message: 'E-mail é obrigatório' })
     @IsEmail({}, { message: 'E-mail inválido' })
@@ -39,7 +39,7 @@ export class CreateUserDto {
     @ApiProperty({
         type: 'string',
         description: 'Senha forte',
-        required: true
+        required: true,
     })
     @IsDefined({ message: 'Senha é obrigatória' })
     @IsStrongPassword(
@@ -49,7 +49,8 @@ export class CreateUserDto {
             minSymbols: PASSWORD_MIN_SYMBOLS,
         },
         {
-            message: 'Senha deve conter no mínimo uma letra maiúscula, um número e um caracter especial',
+            message:
+                'Senha deve conter no mínimo uma letra maiúscula, um número e um caracter especial',
         },
     )
     @Length(PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, {
@@ -61,7 +62,7 @@ export class CreateUserDto {
     @ApiProperty({
         type: 'string',
         description: 'Nome do usuário',
-        required: false
+        required: false,
     })
     @IsOptional()
     @Length(NAME_MIN_LENGTH, NAME_MAX_LENGTH, {
@@ -73,7 +74,7 @@ export class CreateUserDto {
     @ApiProperty({
         type: 'string',
         description: 'Telefone válido',
-        required: false
+        required: false,
     })
     @IsOptional()
     @IsPhoneNumber('BR', { message: 'Telefone inválido' })

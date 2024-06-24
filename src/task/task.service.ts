@@ -9,55 +9,42 @@ import { FindAll } from './types/find-all.type';
 export class TaskService {
     constructor(
         @Inject('ITaskRepository')
-        private readonly taskRepository: ITaskRepository
-    ) { }
+        private readonly taskRepository: ITaskRepository,
+    ) {}
 
     async create(createTaskDto: CreateTaskDto) {
         await this.taskRepository.create(createTaskDto);
     }
 
-    async findAll({
-        page,
-        take,
-        userId
-    }: FindAll) {
+    async findAll({ page, take, userId }: FindAll) {
         const tasks = await this.taskRepository.findMany({
             take,
             skip: page * take,
-            userId
+            userId,
         });
         if (tasks.length === 0)
-            throw new NotFoundException("Nenhuma tarefa cadastrada");
+            throw new NotFoundException('Nenhuma tarefa cadastrada');
 
         return tasks;
     }
 
     async findUnique(id: number) {
         const task = await this.taskRepository.findUnique(id);
-        if (!task)
-            throw new NotFoundException("Tarefa não cadastrada");
+        if (!task) throw new NotFoundException('Tarefa não cadastrada');
     }
 
-    async filter({
-        page,
-        take,
-        userId,
-        id,
-        title,
-        finished
-    }: Filter) {
+    async filter({ page, take, userId, id, title, finished }: Filter) {
         const tasks = await this.taskRepository.findMany({
-            skip: (page * take),
+            skip: page * take,
             take,
             userId,
             id,
             title,
-            finished
+            finished,
         });
 
-
         if (tasks.length === 0)
-            throw new NotFoundException("Nenhuma tarefa encontrada");
+            throw new NotFoundException('Nenhuma tarefa encontrada');
 
         return tasks;
     }

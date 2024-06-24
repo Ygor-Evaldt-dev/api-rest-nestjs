@@ -9,7 +9,7 @@ import { capitalize } from 'src/shared/utils/capitalize.util';
 
 @Injectable()
 export class PrismaRepository implements IUserRepository {
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(private readonly prisma: PrismaService) {}
 
     async create(dto: CreateUserDto): Promise<void> {
         await this.prisma.user.create({
@@ -29,9 +29,7 @@ export class PrismaRepository implements IUserRepository {
             },
         });
 
-        return register
-            ? this.fromDatabase(register)
-            : null
+        return register ? this.fromDatabase(register) : null;
     }
 
     async update(id: number, dto: UpdateUserDto): Promise<void> {

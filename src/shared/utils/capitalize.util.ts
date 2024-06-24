@@ -6,8 +6,8 @@ export function capitalize(text: string): string {
         let letters = word.split('');
         if (word.length >= 3) letters[0] = letters[0].toUpperCase();
 
-        words[index] = letters.join('');;
-    })
+        words[index] = letters.join('');
+    });
 
     return words.join(' ');
 }

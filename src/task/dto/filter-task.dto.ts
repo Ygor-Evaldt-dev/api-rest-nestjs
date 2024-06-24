@@ -14,6 +14,8 @@ export class FilterTasksDto {
 
     @IsOptional()
     @IsBoolean()
-    @Transform(({ value }) => value === 'true' ? true : value === 'false' ? false : value)
+    @Transform(({ value }) =>
+        value === 'true' ? true : value === 'false' ? false : value,
+    )
     finished?: boolean;
 }

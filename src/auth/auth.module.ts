@@ -37,4 +37,4 @@ import { APP_GUARD } from '@nestjs/core';
     exports: [BcryptService, AuthService],
     controllers: [AuthController],
 })
-export class AuthModule { }
+export class AuthModule {}

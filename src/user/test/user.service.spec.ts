@@ -1,10 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../user.service';
-import { DatabaseModule } from 'src/database/database.module';
-import { UserController } from '../user.controller';
 import { PrismaService } from 'src/database/prisma.service';
-import { PrismaRepository } from '../repositories/prisma.repository';
-import { BcryptService } from 'src/auth/encrypter/bcrypt.service';
 import { getTestingModule } from './utils/get-testing-module';
 import { users } from './utils/users';
 
@@ -12,15 +7,14 @@ describe('UserService', () => {
     let service: UserService;
     let prismaService: PrismaService;
 
-    beforeEach(async () => {
+    beforeAll(async () => {
         const module = await getTestingModule();
 
-        service = await module.resolve<UserService>(UserService);
-        prismaService = await module.resolve<PrismaService>(PrismaService);
+        service = module.get<UserService>(UserService);
+        prismaService = module.get<PrismaService>(PrismaService);
 
         const user = await service.findByEmail(users.exists.email);
-        if (!user)
-            await service.create(users.exists);
+        if (!user) await service.create(users.exists);
     });
 
     afterAll(async () => {
@@ -41,12 +35,12 @@ describe('UserService', () => {
             const exec = async () => service.create(users.new);
             await expect(exec()).resolves.not.toThrow();
         });
-    })
+    });
 
     describe('findByEmail', () => {
         it('should throw NotFoundException error if user is not registred', async () => {
             const exec = async () => service.findByEmail('any@gmail.com');
-            await expect(exec()).rejects.toThrow('Usuário não cadastrado')
+            await expect(exec()).rejects.toThrow('Usuário não cadastrado');
         });
 
         it('should return an user by email', async () => {
@@ -61,7 +55,7 @@ describe('UserService', () => {
     describe('findById', () => {
         it('should throw NotFoundException error if user is not exists', async () => {
             const exec = async () => service.findById(0);
-            await expect(exec()).rejects.toThrow('Usuário não cadastrado')
+            await expect(exec()).rejects.toThrow('Usuário não cadastrado');
         });
 
         it('should return an existing user', async () => {
@@ -78,7 +72,7 @@ describe('UserService', () => {
             const id = 0;
             const exec = async () => service.update(id, users.exists);
 
-            await expect(exec()).rejects.toThrow('Usuário não cadastrado')
+            await expect(exec()).rejects.toThrow('Usuário não cadastrado');
         });
 
         it('should update an existing user', async () => {
@@ -93,7 +87,7 @@ describe('UserService', () => {
         it('should throw NotFoundException error if user is not exists', async () => {
             const id = 0;
             const exec = async () => service.remove(id);
-            await expect(exec()).rejects.toThrow('Usuário não cadastrado')
+            await expect(exec()).rejects.toThrow('Usuário não cadastrado');
         });
 
         it('should remove an existing user', async () => {
