@@ -1,13 +1,3 @@
-/*
-export class User {
-    id: number;
-    email: string;
-    password: string;
-    name?: string;
-    phone?: string;
-}
-*/
-
 import { Email } from 'src/shared/value-objects/email';
 import { Name } from 'src/shared/value-objects/name';
 

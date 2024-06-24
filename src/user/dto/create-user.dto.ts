@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
+    IsDefined,
     IsEmail,
-    IsLowercase,
-    IsNumber,
     IsOptional,
     IsPhoneNumber,
     IsString,
@@ -29,12 +28,12 @@ export class CreateUserDto {
         description: 'E-mail válido',
         required: true
     })
-    @IsString({ message: 'E-mail deve ser um texto' })
-    @IsEmail({}, { message: 'Email inválido' })
+    @IsDefined({ message: 'E-mail é obrigatório' })
+    @IsEmail({}, { message: 'E-mail inválido' })
     @MaxLength(EMAIL_MAX_LENGTH, {
         message: `E-mail deve ter no máximo ${EMAIL_MAX_LENGTH} caracteres`,
     })
-    @Transform(({ value }) => value?.trim().toLowerCase())
+    @Transform(({ value }) => value?.toString().trim().toLowerCase())
     email: string;
 
     @ApiProperty({
@@ -42,7 +41,7 @@ export class CreateUserDto {
         description: 'Senha forte',
         required: true
     })
-    @IsString({ message: 'Senha deve ser um texto' })
+    @IsDefined({ message: 'Senha é obrigatória' })
     @IsStrongPassword(
         {
             minUppercase: PASSWORD_MIN_UPPER,
@@ -56,7 +55,7 @@ export class CreateUserDto {
     @Length(PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, {
         message: `Senha deve ter entre ${PASSWORD_MIN_LENGTH} e ${PASSWORD_MAX_LENGTH} caracteres`,
     })
-    @Transform(({ value }) => value?.trim())
+    @Transform(({ value }) => value?.toString().trim())
     password: string;
 
     @ApiProperty({
@@ -65,11 +64,10 @@ export class CreateUserDto {
         required: false
     })
     @IsOptional()
-    @IsString({ message: 'Nome deve ser um texto' })
     @Length(NAME_MIN_LENGTH, NAME_MAX_LENGTH, {
         message: `Nome deve ter no mínimo ${NAME_MIN_LENGTH} e no máximo ${NAME_MAX_LENGTH} caracteres`,
     })
-    @Transform(({ value }) => value?.trim().toLowerCase())
+    @Transform(({ value }) => value?.toString().trim().toLowerCase())
     name?: string;
 
     @ApiProperty({
@@ -78,11 +76,10 @@ export class CreateUserDto {
         required: false
     })
     @IsOptional()
-    @IsString({ message: 'Telefone deve ser um texto' })
     @IsPhoneNumber('BR', { message: 'Telefone inválido' })
     @Length(PHONE_LENGTH, PHONE_LENGTH, {
         message: `Telefone deve ter ${PHONE_LENGTH} dígitos`,
     })
-    @Transform(({ value }) => value?.trim())
+    @Transform(({ value }) => value?.toString().trim())
     phone?: string;
 }
