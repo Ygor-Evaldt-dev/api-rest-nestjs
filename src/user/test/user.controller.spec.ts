@@ -5,6 +5,9 @@ import { users } from './utils/users';
 import { AxiosInstance } from 'axios';
 import { getAxiosInstance } from 'src/auth/test/utils/get-axios-instance';
 import { getAuthorization } from 'src/auth/test/utils/get-authorization';
+import { PrismaService } from 'src/database/prisma.service';
+import { UserService } from '../user.service';
+import { HttpStatus } from '@nestjs/common';
 import {
 	NAME_MAX_LENGTH,
 	NAME_MIN_LENGTH,
@@ -12,9 +15,6 @@ import {
 	PASSWORD_MIN_LENGTH,
 	PHONE_LENGTH
 } from 'src/shared/constants/validator.constants';
-import { PrismaService } from 'src/database/prisma.service';
-import { UserService } from '../user.service';
-import { HttpStatus } from '@nestjs/common';
 
 describe('UserController', () => {
 	let controller: UserController;
@@ -48,7 +48,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error?.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe('E-mail inválido');
 			}
 		});
@@ -59,7 +59,7 @@ describe('UserController', () => {
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
 
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe(
 					'E-mail deve ter no máximo 150 caracteres'
 				);
@@ -74,7 +74,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe('E-mail inválido');
 			}
 		});
@@ -86,7 +86,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe('E-mail é obrigatório');
 			}
 		});
@@ -98,7 +98,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe('Senha é obrigatória');
 			}
 		});
@@ -111,7 +111,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe(
 					'Senha deve conter no mínimo uma letra maiúscula, um número e um caracter especial'
 				);
@@ -126,7 +126,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe(
 					`Senha deve ter entre ${PASSWORD_MIN_LENGTH} e ${PASSWORD_MAX_LENGTH} caracteres`
 				);
@@ -142,7 +142,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe(
 					`Senha deve ter entre ${PASSWORD_MIN_LENGTH} e ${PASSWORD_MAX_LENGTH} caracteres`
 				);
@@ -157,7 +157,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe(
 					`Nome deve ter no mínimo ${NAME_MIN_LENGTH} e no máximo ${NAME_MAX_LENGTH} caracteres`
 				);
@@ -172,7 +172,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe(
 					`Nome deve ter no mínimo ${NAME_MIN_LENGTH} e no máximo ${NAME_MAX_LENGTH} caracteres`
 				);
@@ -187,7 +187,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe(`Telefone inválido`);
 			}
 		});
@@ -200,7 +200,7 @@ describe('UserController', () => {
 				});
 			} catch (error: any) {
 				const { statusCode, message } = error.response?.data;
-				expect(statusCode).toBe(400);
+				expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
 				expect(message[0]).toBe(
 					`Telefone deve ter ${PHONE_LENGTH} dígitos`
 				);
@@ -226,8 +226,6 @@ describe('UserController', () => {
 						}
 					}
 				);
-
-				expect(status).toBe(200);
 			} catch (error: any) {
 				const { statusCode, message } = error?.response?.data;
 				expect(statusCode).toBe(HttpStatus.NOT_FOUND);
@@ -254,7 +252,7 @@ describe('UserController', () => {
 				}
 			);
 
-			expect(status).toBe(200);
+			expect(status).toBe(HttpStatus.OK);
 		});
 	});
 
@@ -268,8 +266,6 @@ describe('UserController', () => {
 					},
 					data: {}
 				});
-
-				expect(status).toBe(200);
 			} catch (error: any) {
 				const { statusCode, message } = error?.response?.data;
 				expect(statusCode).toBe(HttpStatus.NOT_FOUND);
@@ -289,7 +285,7 @@ describe('UserController', () => {
 				}
 			});
 
-			expect(status).toBe(200);
+			expect(status).toBe(HttpStatus.OK);
 		});
 	});
 });
