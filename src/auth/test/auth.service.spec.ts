@@ -18,21 +18,17 @@ describe('AuthService', () => {
 
     describe('sing in', () => {
         it('should throw NotFoundExeption if user is not registred', async () => {
-            try {
-                const { password } = users.exists;
-                const { accessToken } = await service.singIn('any@gmail.com', password);
-            } catch (error: any) {
-                expect(error.response?.statusCode).toBe(HttpStatus.NOT_FOUND);
-            }
+            const { password } = users.exists;
+            const exec = async () => service.singIn('any@gmail.com', password);
+
+            await expect(exec()).rejects.toThrow('Usuário não cadastrado')
         });
 
         it('should throw UnauthorizedException if user password is wrong', async () => {
-            try {
-                const { email } = users.exists;
-                const { accessToken } = await service.singIn(email, 'any_pass');
-            } catch (error: any) {
-                expect(error.response?.statusCode).toBe(HttpStatus.UNAUTHORIZED);
-            }
+            const { email } = users.exists;
+            const exec = async () => service.singIn(email, 'any_pass');
+
+            await expect(exec()).rejects.toThrow('Usuário não autorizado');
         });
 
         it('should return access token', async () => {

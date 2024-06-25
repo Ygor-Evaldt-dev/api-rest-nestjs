@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
     IsBoolean,
+    IsDefined,
     IsNumber,
     IsOptional,
     IsString,
@@ -17,11 +18,11 @@ export class CreateTaskDto {
         type: 'string',
         description: 'Título da tarefa',
     })
-    @IsString({ message: 'Título deve ser um texto' })
+    @IsDefined({ message: 'Título é obrigatório' })
     @Length(TITLE_MIN_LENGTH, TITLE_MAX_LENGTH, {
         message: `Título deve ter no mínimo ${TITLE_MIN_LENGTH} e no máximo ${TITLE_MAX_LENGTH} caracteres`,
     })
-    @Transform(({ value }) => value?.trim().toLowerCase())
+    @Transform(({ value }) => value?.toString().trim().toLowerCase())
     title: string;
 
     @ApiProperty({
