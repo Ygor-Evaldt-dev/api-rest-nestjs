@@ -16,28 +16,30 @@ describe('AuthService', () => {
         expect(service).toBeDefined();
     });
 
-    it('should throw NotFoundExeption if user is not registred', async () => {
-        try {
-            const { password } = users.exists;
-            const { accessToken } = await service.singIn('any@gmail.com', password);
-        } catch (error: any) {
-            expect(error.response?.statusCode).toBe(HttpStatus.NOT_FOUND);
-        }
-    });
+    describe('sing in', () => {
+        it('should throw NotFoundExeption if user is not registred', async () => {
+            try {
+                const { password } = users.exists;
+                const { accessToken } = await service.singIn('any@gmail.com', password);
+            } catch (error: any) {
+                expect(error.response?.statusCode).toBe(HttpStatus.NOT_FOUND);
+            }
+        });
 
-    it('should throw UnauthorizedException if user password is wrong', async () => {
-        try {
-            const { email } = users.exists;
-            const { accessToken } = await service.singIn(email, 'any_pass');
-        } catch (error: any) {
-            expect(error.response?.statusCode).toBe(HttpStatus.UNAUTHORIZED);
-        }
-    });
+        it('should throw UnauthorizedException if user password is wrong', async () => {
+            try {
+                const { email } = users.exists;
+                const { accessToken } = await service.singIn(email, 'any_pass');
+            } catch (error: any) {
+                expect(error.response?.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+            }
+        });
 
-    it('should return access token', async () => {
-        const { email, password } = users.exists;
-        const { accessToken } = await service.singIn(email, password);
+        it('should return access token', async () => {
+            const { email, password } = users.exists;
+            const { accessToken } = await service.singIn(email, password);
 
-        expect(accessToken).toBeDefined();
-    });
+            expect(accessToken).toBeDefined();
+        });
+    })
 });
