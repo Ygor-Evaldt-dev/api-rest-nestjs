@@ -1,38 +1,38 @@
 import {
-    Inject,
-    Injectable,
-    NotFoundException,
-    UnauthorizedException,
+	Inject,
+	Injectable,
+	NotFoundException,
+	UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { BcryptService } from './encrypter/bcrypt.service';
 import { JwtService } from '@nestjs/jwt';
+import { IEncrypter } from './encrypter/encrypter.interface';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        @Inject('IEncrypter')
-        private readonly encrypter: BcryptService,
-        private readonly userService: UserService,
-        private readonly jwtService: JwtService,
-    ) {}
+	constructor(
+		@Inject('IEncrypter')
+		private readonly encrypter: IEncrypter,
+		private readonly userService: UserService,
+		private readonly jwtService: JwtService,
+	) {}
 
-    async singIn(email: string, password: string) {
-        const user = await this.userService.findByEmail(email);
-        if (!user) throw new NotFoundException('Usuário não cadastrado');
+	async singIn(email: string, password: string) {
+		const user = await this.userService.findByEmail(email);
+		if (!user) throw new NotFoundException('Usuário não cadastrado');
 
-        const validPassword = await this.encrypter.compare(
-            password,
-            user.password,
-        );
-        if (!validPassword)
-            throw new UnauthorizedException('Usuário não autorizado');
+		const validPassword = await this.encrypter.compare(
+			password,
+			user.password,
+		);
+		if (!validPassword)
+			throw new UnauthorizedException('Usuário não autorizado');
 
-        const access_token = await this.jwtService.signAsync({
-            sub: user.id,
-            email: user.email.complete,
-        });
+		const accessToken = await this.jwtService.signAsync({
+			sub: user.id,
+			email: user.email.complete,
+		});
 
-        return { access_token };
-    }
+		return { accessToken };
+	}
 }
