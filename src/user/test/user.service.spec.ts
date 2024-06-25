@@ -1,7 +1,7 @@
 import { UserService } from '../user.service';
 import { PrismaService } from 'src/database/prisma.service';
 import { getTestingModule } from './utils/get-testing-module';
-import { users } from './utils/users';
+import { users } from '../../shared/test/users';
 
 describe('UserService', () => {
 	let service: UserService;

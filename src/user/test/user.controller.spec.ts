@@ -1,10 +1,10 @@
 import { TestingModule } from '@nestjs/testing';
 import { UserController } from '../user.controller';
 import { getTestingModule } from './utils/get-testing-module';
-import { users } from './utils/users';
+import { users } from '../../shared/test/users';
 import { AxiosInstance } from 'axios';
-import { getAxiosInstance } from 'src/auth/test/utils/get-axios-instance';
-import { getAuthorization } from 'src/auth/test/utils/get-authorization';
+import { getAxiosInstance } from 'src/shared/test/get-axios-instance';
+import { getAuthorization } from 'src/shared/test/get-authorization';
 import { PrismaService } from 'src/database/prisma.service';
 import { UserService } from '../user.service';
 import { HttpStatus } from '@nestjs/common';

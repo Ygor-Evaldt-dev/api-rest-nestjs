@@ -9,32 +9,32 @@ import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 
 @Module({
-    imports: [
-        JwtModule.registerAsync({
-            global: true,
-            useFactory: async (configService: ConfigService) => ({
-                secret: configService.get<string>('TOKEN_SECRET'),
-                signOptions: {
-                    expiresIn: configService.get<string>('TOKEN_TIME'),
-                },
-            }),
-            inject: [ConfigService],
-        }),
-        UserModule,
-    ],
-    providers: [
-        {
-            provide: APP_GUARD,
-            useClass: AuthGuard,
-        },
-        {
-            provide: 'IEncrypter',
-            useClass: BcryptService,
-        },
-        BcryptService,
-        AuthService,
-    ],
-    exports: [BcryptService, AuthService],
-    controllers: [AuthController],
+	imports: [
+		JwtModule.registerAsync({
+			global: true,
+			useFactory: async (configService: ConfigService) => ({
+				secret: configService.get<string>('TOKEN_SECRET'),
+				signOptions: {
+					expiresIn: configService.get<string>('TOKEN_TIME')
+				}
+			}),
+			inject: [ConfigService]
+		}),
+		UserModule
+	],
+	providers: [
+		{
+			provide: APP_GUARD,
+			useClass: AuthGuard
+		},
+		{
+			provide: 'IEncrypter',
+			useClass: BcryptService
+		},
+		BcryptService,
+		AuthService
+	],
+	exports: [BcryptService, AuthService],
+	controllers: [AuthController]
 })
 export class AuthModule {}
