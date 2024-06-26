@@ -66,6 +66,30 @@ describe('TaskService', () => {
         it('should throw NotFoundExeption if task is not registred', async () => {
             const exec = async () => taskService.findUnique(0);
             await expect(exec()).rejects.toThrow('Tarefa não cadastrada');
-        })
+        });
+
+        it('should return an existing task', async () => {
+            const { registers } = await taskService.findAll({
+                page: 0,
+                take: 1,
+                userId: user.id
+            })
+            const task = await taskService.findUnique(registers[0].id);
+
+            expect(task).toBeDefined();
+            expect(task).toHaveProperty('title');
+        });
+    });
+
+    describe('filter', () => {
+
+    });
+
+    describe('update', () => {
+
+    });
+
+    describe('remove', () => {
+
     });
 });
