@@ -62,4 +62,10 @@ describe('TaskService', () => {
         });
     });
 
+    describe('find unique', () => {
+        it('should throw NotFoundExeption if task is not registred', async () => {
+            const exec = async () => taskService.findUnique(0);
+            await expect(exec()).rejects.toThrow('Tarefa não cadastrada');
+        })
+    });
 });

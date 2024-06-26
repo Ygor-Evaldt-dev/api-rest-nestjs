@@ -37,6 +37,8 @@ export class TaskService {
     async findUnique(id: number) {
         const task = await this.taskRepository.findUnique(id);
         if (!task) throw new NotFoundException('Tarefa não cadastrada');
+
+        return task;
     }
 
     async filter({ page, take, userId, id, title, finished }: Filter) {
