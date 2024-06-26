@@ -19,7 +19,7 @@ export class UserService {
         private readonly userRepository: IUserRepository,
         @Inject('IEncrypter')
         private readonly encrypter: IEncrypter,
-    ) {}
+    ) { }
 
     async create(createUserDto: CreateUserDto) {
         const { email, password } = createUserDto;
@@ -29,6 +29,7 @@ export class UserService {
         });
         if (userWithSameEmail)
             throw new ConflictException('Usuário já cadastrado');
+
 
         createUserDto.password = await this.encrypter.hash(password);
         await this.userRepository.create(createUserDto);

@@ -5,28 +5,32 @@ import { tasks } from './util/tasks';
 import { UserService } from 'src/user/user.service';
 import { users } from 'src/shared/test/users';
 import { User } from 'src/user/entities/user.entity';
+import { PrismaService } from 'src/database/prisma.service';
 
 describe('TaskService', () => {
     let taskService: TaskService;
     let userService: UserService;
+    let prismaService: PrismaService;
     let user: User;
 
     beforeAll(async () => {
         const module: TestingModule = await getTestingModule();
         taskService = module.get<TaskService>(TaskService);
         userService = module.get<UserService>(UserService);
+        prismaService = module.get<PrismaService>(PrismaService);
 
         user = await userService.findByEmail(users.exists.email);
-        if (user) return;
-
-        await userService.create(users.exists);
-        user = await userService.findByEmail(users.exists.email);
-
     });
 
-    it('should be defined', () => {
-        expect(taskService).toBeDefined();
-        expect(userService).toBeDefined();
+    afterEach(async () => {
+        await prismaService.$disconnect();
+    });
+
+    describe('modules', () => {
+        it('should be defined', () => {
+            expect(taskService).toBeDefined();
+            expect(userService).toBeDefined();
+        });
     });
 
     describe('create', () => {
