@@ -17,6 +17,11 @@ describe('TaskService', () => {
         userService = module.get<UserService>(UserService);
 
         user = await userService.findByEmail(users.exists.email);
+        if (user) return;
+
+        await userService.create(users.exists);
+        user = await userService.findByEmail(users.exists.email);
+
     });
 
     it('should be defined', () => {
@@ -82,14 +87,62 @@ describe('TaskService', () => {
     });
 
     describe('filter', () => {
+        it('should throw NotFoundExeption if the filter finds no tasks', async () => {
+            const exec = async () => taskService.filter({
+                page: 0,
+                take: 10,
+                userId: 0,
+                id: 0,
+                title: 'any',
+                finished: true
+            });
+            await expect(exec()).rejects.toThrow('Nenhuma tarefa encontrada');
+        });
 
+        it('should return filtred tasks', async () => {
+            const filtredTasks = await taskService.filter({
+                page: 0,
+                take: 10,
+                userId: user.id,
+                finished: false
+            });
+
+            expect(filtredTasks).toHaveProperty('registers');
+            expect(filtredTasks.registers.length).toBeGreaterThan(0);
+        });
     });
 
     describe('update', () => {
+        it('shoult throw NotFoundExeption if task is not registred', async () => {
+            const exec = async () => taskService.update(0, {});
+            await expect(exec()).rejects.toThrow('Tarefa não cadastrada');
+        });
 
+        it('should update an existing task', async () => {
+            const { registers } = await taskService.findAll({
+                page: 0,
+                take: 1,
+                userId: user.id
+            });
+            const exec = async () => taskService.update(registers[0].id, registers[0]);
+            await expect(exec()).resolves.not.toThrow();
+        })
     });
 
     describe('remove', () => {
+        it('shoult throw NotFoundExeption if task is not registred', async () => {
+            const exec = async () => taskService.remove(0);
+            await expect(exec()).rejects.toThrow('Tarefa não cadastrada');
+        });
 
+        it('should remove an existing task', async () => {
+            const { registers } = await taskService.findAll({
+                page: 0,
+                take: 1,
+                userId: user.id
+            });
+            const exec = async () => taskService.remove(registers[0].id);
+            await expect(exec()).resolves.not.toThrow();
+        })
     });
 });

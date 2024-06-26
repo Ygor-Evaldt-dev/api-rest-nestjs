@@ -32,8 +32,9 @@ export class PrismaRepository implements ITaskRepository {
         const task = await this.prisma.task.findUnique({
             where: { id },
         });
-
-        return this.fromDatabase(task);
+        return task
+            ? this.fromDatabase(task)
+            : null
     }
 
     async findMany(params: {
@@ -86,6 +87,8 @@ export class PrismaRepository implements ITaskRepository {
         description,
         finished
     }: Task): TaskEntity {
+        if (!id) return;
+
         return new TaskEntity(id, capitalize(title), description, finished);
     }
 }
