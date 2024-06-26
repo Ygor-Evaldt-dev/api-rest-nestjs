@@ -48,7 +48,33 @@ $ npm run start:prod
 
 ### Conferindo se tudo deu certo
 - Acesse [http://localhost:3000/swagger](http://localhost:3000/swagger) para acessar a documentação do webservice.
-- Acesse [http://localhost:8081](http://localhost:8081) para acessar o pgAdmin com as credenciais definidas no arquivo '.env.development'
+- Acesse [http://localhost:8081](http://localhost:8081) para acessar o pgAdmin com as credenciais definidas no arquivo '.env'
+
+### .env
+É necessário criar um arquivo .env na raiz do projeto seguindo o modelo abaixo:
+```bash
+#Local development
+PORT=3000
+BASE_URL=http://localhost:${PORT}
+
+# Token
+TOKEN_SECRET=token_secret
+TOKEN_TIME=1d
+
+# Database
+## Environment variables declared in this file are automatically made available to Prisma.
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=db_name
+POSTGRES_USER=db_user
+POSTGRES_PASSWORD=db_password
+
+PGADMIN_DEFAULT_EMAIL=email@email.com
+PGADMIN_DEFAULT_PASSWORD=password
+
+## Url
+DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+```
 
 ## Como utilizar
 É preciso cadastrar um usuário para utilização dos serviços autenticados.
