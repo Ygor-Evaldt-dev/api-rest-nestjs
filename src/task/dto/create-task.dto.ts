@@ -31,8 +31,7 @@ export class CreateTaskDto {
         required: false,
     })
     @IsOptional()
-    @IsString({ message: 'Descrição deve ser um texto' })
-    @Transform(({ value }) => value?.trim().toLowerCase())
+    @Transform(({ value }) => value?.toString().trim().toLowerCase())
     description?: string;
 
     @ApiProperty({

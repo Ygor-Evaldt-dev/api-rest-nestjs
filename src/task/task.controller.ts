@@ -11,6 +11,7 @@ import {
     Query,
     UsePipes,
     ValidationPipe,
+    HttpCode,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -31,9 +32,10 @@ import { ApiFilterQueries } from './decorators/api-filter-queries.decorator';
 @ApiBearerAuth()
 @Controller('task')
 export class TaskController {
-    constructor(private readonly taskService: TaskService) {}
+    constructor(private readonly taskService: TaskService) { }
 
     @ApiOperation({ summary: 'Cadastrar tarefa' })
+    @HttpCode(201)
     @Post()
     async create(@Body() createTaskDto: CreateTaskDto, @Request() req: any) {
         await this.taskService.create({
