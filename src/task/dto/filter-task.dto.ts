@@ -3,17 +3,17 @@ import { Transform, Type } from 'class-transformer';
 
 export class FilterTasksDto {
     @IsOptional()
-    @IsNumber()
+    @IsNumber({}, { message: 'id deve ser um número' })
     @Type(() => Number)
     id?: number;
 
     @IsOptional()
-    @IsString()
-    @Transform(({ value }) => value.trim().toLowerCase())
+    @IsString({ message: 'title deve ser um texto' })
+    @Transform(({ value }) => value.toString().trim().toLowerCase())
     title?: string;
 
     @IsOptional()
-    @IsBoolean()
+    @IsBoolean({ message: 'finished deve ser um valor booleano' })
     @Transform(({ value }) =>
         value === 'true' ? true : value === 'false' ? false : value,
     )
